@@ -1,20 +1,41 @@
 package com.pireslabs.designpatterns;
 
+import com.pireslabs.designpatterns.builder.Meal;
+import com.pireslabs.designpatterns.builder.MealBuilder;
 import com.pireslabs.designpatterns.factory.shapes.Circle;
 import com.pireslabs.designpatterns.factory.shapes.Retangle;
 import com.pireslabs.designpatterns.factory.shapes.Shape;
 import com.pireslabs.designpatterns.factory.ShapeFactory;
 import com.pireslabs.designpatterns.factory.shapes.Square;
 import com.pireslabs.designpatterns.singleton.SingletonObject;
-import com.pireslabs.designpatterns.statictest.MyFuckClass;
 
 public class DesignPatterns {
 
+    private static final String PATTERN_FACTORY = "FACTORY";
+    private static final String PATTERN_SINGLETON = "SINGLETON";
+    private static final String PATTERN_BUILDER = "BUILDER";
+    
     public static void main(String[] args) {
-        //executeFactoryPattern();
-        executeSingletonPattern();
         
-        //executeStaticTest();
+        if(args.length == 0) {
+            System.err.println("None Design Pattern selected.");
+            System.exit(0);
+        }
+        
+        switch (args[0].toUpperCase()) {
+            case PATTERN_FACTORY: {
+                executeFactoryPattern();
+                break;
+            }
+            case PATTERN_SINGLETON: {
+                executeSingletonPattern();
+                break;
+            }
+            case PATTERN_BUILDER: {
+                executeBuilderPattern();
+                break;
+            }
+        }
     }
 
     public static void executeFactoryPattern() {
@@ -33,7 +54,7 @@ public class DesignPatterns {
         Shape abstractShape = factory.getShape(String.class);
         
         if(abstractShape == null) {
-            System.out.println("This factory is not prepared for this type of shape.");
+            System.out.println("The Factory is not prepared for this kind of shape.");
         }
 
     }
@@ -47,17 +68,16 @@ public class DesignPatterns {
         System.out.println("Number of instances of SingletonObject: " + so2.getInstanceCount());
     }
     
-    public static void executeStaticTest() {
-        MyFuckClass mfc1 = new MyFuckClass();
-        MyFuckClass mfc2 = new MyFuckClass();
-        MyFuckClass mfc3 = new MyFuckClass();
-        
-        mfc1.getCount();
-        mfc3.getCount();
-        mfc1.changeValues(10, 9);
-        mfc3.getCount();
-        mfc1.getCount();
-        mfc2.getCount();
+    public static void executeBuilderPattern() {
+        MealBuilder mealBuilder = new MealBuilder();
+        Meal meal = mealBuilder.prepareVegMeal();
+        System.out.println("Veg Meal");
+        meal.showItems();
+        System.out.println("Total Cost: " + meal.getCost());
+        Meal nonVegMeal = mealBuilder.prepareNonVegMeal();
+        System.out.println("Non-veg Meal");
+        nonVegMeal.showItems();
+        System.out.println("Total Cost: " + nonVegMeal.getCost());
     }
 
 }
